@@ -34,11 +34,6 @@ class ThreadsHandler {
     const { id } = request.params;
     const useCase = this._container.getInstance(GetThreadUseCase.name);
     const thread = await useCase.execute(id);
-    console.log('Received Thread ID:', id);
-
-    if (!thread) {
-      console.log('Thread not found');
-    }
     return {
       status: 'success',
       data: {

@@ -132,26 +132,32 @@ describe('/threads endpoint/{threadId}/comments', () => {
     });
   });
 
-  // describe('when DELETE /threads/{threadId}/comments/{commentId}', async () => {
-  //   it('should response 200 if refresh token valid', async () => {
-  //     // Arrange
-  //     const server = await createServer(container);
-  //     const refreshToken = 'refresh_token';
-  //     await AuthenticationsTableTestHelper.addToken(refreshToken);
+  describe('when DELETE /threads/{threadId}/comments/{commentId}', () => {
+    it('should response 200 if commentId valid', async () => {
+      // Arrange
+      const server = await createServer(container);
+      const accessToken = await AuthHelper.getAccessToken({});
+      await ThreadsTableTestHelper.addThread({
+        id: 'thread-123',
+      });
+      await CommentTableTestHelper.addComment({
+        id: 'comment-123',
+        threadId: 'thread-123',
+      });
 
-  //     // Action
-  //     const response = await server.inject({
-  //       method: 'DELETE',
-  //       url: '/threads/{threadId}/comments/{commentId}',
-  //       payload: {
-  //         refreshToken,
-  //       },
-  //     });
+      // Action
+      const response = await server.inject({
+        method: 'DELETE',
+        url: '/threads/thread-123/comments/comment-123',
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      });
 
-  //     // Assert
-  //     const responseJson = JSON.parse(response.payload);
-  //     expect(response.statusCode).toEqual(200);
-  //     expect(responseJson.status).toEqual('success');
-  //   });
-  // });
+      // Assert
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(200);
+      expect(responseJson.status).toEqual('success');
+    });
+  });
 });

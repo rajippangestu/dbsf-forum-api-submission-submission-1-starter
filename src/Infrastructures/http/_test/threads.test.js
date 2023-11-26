@@ -4,6 +4,7 @@ const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper
 const AuthHelper = require('../../../../tests/AuthHelper');
 const container = require('../../container');
 const createServer = require('../createServer');
+const threads = require('../../../Interfaces/http/api/threads');
 
 describe('/threads endpoint', () => {
   afterAll(async () => {
@@ -145,6 +146,8 @@ describe('/threads endpoint', () => {
       // Assert
       expect(response.statusCode).toEqual(404);
       const responseJson = JSON.parse(response.payload);
+      expect(responseJson.status).toEqual('fail');
+      expect(responseJson.message).toEqual('thread tidak ditemukan');
     });
 
     it('should response 200 when OK', async () => {
@@ -177,6 +180,10 @@ describe('/threads endpoint', () => {
         method: 'GET',
         url: `/threads/${threadId}`,
       });
+
+      console.log('getThreadResponse.payload:', getThreadResponse.payload);
+
+      console.log('thread.payload:', getThreadResponse.payload);
 
       // Assert
       const responseJson = JSON.parse(getThreadResponse.payload);
